@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2011-2021 The Linux Foundation. All rights reserved.
- * Copyright (c) 2021-2022 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2021-2023 Qualcomm Innovation Center, Inc. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -442,7 +442,7 @@ PREPACK struct htt_option_tlv_ll_bus_addr_size_t {
  * downloads over the host --> target bus are as slow as or slower than
  * the transmissions over the WLAN PHY.  For cases where the bus is faster
  * than the WLAN PHY, the target will transmit relatively large A-MPDUs,
- * and consquently will send one TX_COMPL_IND message that covers several
+ * and consequently will send one TX_COMPL_IND message that covers several
  * tx frames.  For cases where the WLAN PHY is faster than the bus,
  * the target will end up transmitting very short A-MPDUs, and consequently
  * sending many TX_COMPL_IND messages, which each cover a very small number
@@ -485,7 +485,7 @@ PREPACK struct htt_option_tlv_hl_suppress_tx_compl_ind_t {
  * The MAX_TX_QUEUE_GROUPS TLV can be sent from the target to the host as
  * a suffix to the VERSION_CONF message.  If the host has specified in the
  * VER_REQ message a limit on the number of tx queue groups the host can
- * supprt, the target shall limit its specification of the maximum tx groups
+ * support, the target shall limit its specification of the maximum tx groups
  * to be no larger than this host-specified limit.
  *
  * If the target does not provide a MAX_TX_QUEUE_GROUPS TLV, then the host
@@ -735,10 +735,10 @@ typedef enum {
     HTT_STATS_UNAVAILABLE_ERROR_STATS_TAG          = 110, /* htt_stats_error_tlv_v */
     HTT_STATS_TX_SELFGEN_AC_SCHED_STATUS_STATS_TAG = 111, /* htt_tx_selfgen_ac_sched_status_stats_tlv */
     HTT_STATS_TX_SELFGEN_AX_SCHED_STATUS_STATS_TAG = 112, /* htt_tx_selfgen_ax_sched_status_stats_tlv */
-    HTT_STATS_TXBF_OFDMA_NDPA_STATS_TAG            = 113, /* htt_txbf_ofdma_ndpa_stats_tlv */
-    HTT_STATS_TXBF_OFDMA_NDP_STATS_TAG             = 114, /* htt_txbf_ofdma_ndp_stats_tlv */
-    HTT_STATS_TXBF_OFDMA_BRP_STATS_TAG             = 115, /* htt_txbf_ofdma_brp_stats_tlv */
-    HTT_STATS_TXBF_OFDMA_STEER_STATS_TAG           = 116, /* htt_txbf_ofdma_steer_stats_tlv */
+    HTT_STATS_TXBF_OFDMA_NDPA_STATS_TAG            = 113, /* htt_txbf_ofdma_ndpa_stats_tlv - DEPRECATED */
+    HTT_STATS_TXBF_OFDMA_NDP_STATS_TAG             = 114, /* htt_txbf_ofdma_ndp_stats_tlv - DEPRECATED */
+    HTT_STATS_TXBF_OFDMA_BRP_STATS_TAG             = 115, /* htt_txbf_ofdma_brp_stats_tlv - DEPRECATED */
+    HTT_STATS_TXBF_OFDMA_STEER_STATS_TAG           = 116, /* htt_txbf_ofdma_steer_stats_tlv - DEPRECATED */
     HTT_STATS_STA_UL_OFDMA_STATS_TAG               = 117, /* htt_sta_ul_ofdma_stats_tlv */
     HTT_STATS_VDEV_RTT_RESP_STATS_TAG              = 118, /* htt_vdev_rtt_resp_stats_tlv */
     HTT_STATS_PKTLOG_AND_HTT_RING_STATS_TAG        = 119, /* htt_pktlog_and_htt_ring_stats_tlv */
@@ -1190,7 +1190,7 @@ PREPACK struct htt_tx_msdu_desc ## _paddr_bits_ ## _t                          \
         A_UINT16 chanfreq;                                                     \
                                                                                \
         /* Reason reserved is commented is increasing the htt structure size   \
-         * leads to some wierd issues. Contact Raj/Kyeyoon for more info       \
+         * leads to some weird issues.                                         \
          * A_UINT32 reserved_dword3_bits0_31;                                  \
          */                                                                    \
 } POSTPACK
@@ -2050,7 +2050,8 @@ PREPACK struct htt_tx_msdu_desc_ext2_t {
          * with valid information.
          */
         is_host_opaque_valid :  1,
-        rsvd0                : 29;
+        traffic_end_indication: 1,
+        rsvd0                : 28;
 
     /* DWORD 6 : Host opaque cookie for special frames */
     A_UINT32 host_opaque_cookie  : 16, /* see is_host_opaque_valid */
@@ -2776,7 +2777,7 @@ typedef enum {
 /**
  * @brief HTT TX WBM Completion from firmware to host
  * @details
- *  This structure is passed from firmware to host overlayed on wbm_release_ring
+ *  This structure is passed from firmware to host overlaid on wbm_release_ring
  *  DWORD 3 and 4 for software based completions (Exception frames and
  *  TQM bypass frames)
  *  For software based completions, wbm_release_ring->release_source_module will
@@ -2869,7 +2870,7 @@ PREPACK struct htt_tx_wbm_completion {
  * @details
  *  This structure applies only to WLAN chips that contain WLAN Buffer Mgmt
  *  (WBM) offload HW.
- *  This structure is passed from firmware to host overlayed on wbm_release_ring
+ *  This structure is passed from firmware to host overlaid on wbm_release_ring
  *  For software based completions, release_source_module will
  *  be set to WIFIRELEASE_SOURCE_FW_E. Host SW is expected to inspect using
  *  struct wbm_release_ring and then switch to this after looking at
@@ -2961,7 +2962,7 @@ PREPACK struct htt_tx_wbm_completion_v2 {
  * @details
  *  This structure applies only to WLAN chips that contain WLAN Buffer Mgmt
  *  (WBM) offload HW.
- *  This structure is passed from firmware to host overlayed on wbm_release_ring
+ *  This structure is passed from firmware to host overlaid on wbm_release_ring
  *  For software based completions, release_source_module will
  *  be set to WIFIRELEASE_SOURCE_FW_E. Host SW is expected to inspect using
  *  struct wbm_release_ring and then switch to this after looking at
@@ -3063,7 +3064,7 @@ typedef enum {
  * @details
  *  This structure applies only to WLAN chips that contain WLAN Buffer Mgmt
  *  (WBM) offload HW.
- *  This structure is passed from firmware to host overlayed on wbm_release_ring.
+ *  This structure is passed from firmware to host overlaid on wbm_release_ring.
  *  used only if tx_status is HTT_TX_FW2WBM_TX_STATUS_OK or HTT_TX_FW2WBM_TX_STATUS_DROP
  *  or HTT_TX_FW2WBM_TX_STATUS_TTL
  */
@@ -3222,7 +3223,7 @@ PREPACK struct htt_tx_wbm_transmit_status {
  * @details
  *  This structure applies only to WLAN chips that contain WLAN Buffer Mgmt
  *  (WBM) offload HW.
- *  This structure is passed from firmware to host overlayed on wbm_release_ring.
+ *  This structure is passed from firmware to host overlaid on wbm_release_ring.
  *  used only if tx_status is HTT_TX_FW2WBM_TX_STATUS_REINJECT.
  */
 PREPACK struct htt_tx_wbm_reinject_status {
@@ -3298,7 +3299,7 @@ PREPACK struct htt_tx_wbm_reinject_status {
  * @details
  *  This structure applies only to WLAN chips that contain WLAN Buffer Mgmt
  *  (WBM) offload HW.
- *  This structure is passed from firmware to host overlayed on wbm_release_ring.
+ *  This structure is passed from firmware to host overlaid on wbm_release_ring.
  *  used only if tx_status is HTT_TX_FW2WBM_TX_STATUS_MEC_NOTIFY.
  *  FW sends SA addresses to host for all multicast/broadcast packets received on
  *  STA side.
@@ -5305,7 +5306,7 @@ enum htt_msi_setup_type {
  *                     3'b010: 4 usec
  *                     3'b011: 8 usec (default)
  *                     3'b100: 16 usec
- *                     Others: Reserverd
+ *                     Others: Reserved
  *           b'19    - response_required:
  *                     Host needs HTT_T2H_MSG_TYPE_SRING_SETUP_DONE as response
  *           b'20    - ipa_drop_flag:
@@ -5366,6 +5367,8 @@ enum htt_srng_ring_id {
     HTT_TX_MON_MON2HOST_DEST_RING,  /* Used by monitor to fill status buffers and provide to host */
     HTT_RX_MON_HOST2MON_BUF_RING,   /* Status buffers and Packet buffers are provided by host */
     HTT_RX_MON_MON2HOST_DEST_RING, /* Used by monitor to fill status buffers and provide to host */
+    HTT_LPASS_TO_FW_RXBUF_RING,    /* new LPASS to FW refill ring to recycle rx buffers */
+    HTT_HOST3_TO_FW_RXBUF_RING,    /* used by host for EasyMesh feature */
     /* Add Other SRING which can't be directly configured by host software above this line */
 };
 
@@ -5704,38 +5707,43 @@ enum htt_srng_ring_id {
  *
  *    The message would appear as follows:
  *
- *    |31 28|27|26|25|24|23            16|15  | 11| 10|9 8|7             0|
- *    |-----+--+--+--+--+----------------+----+---+---+---+---------------|
- *    |rsvd1|DT|OV|PS|SS|     ring_id    |     pdev_id    |    msg_type   |
- *    |-------------------------------------------------------------------|
- *    |              rsvd2               |           ring_buffer_size     |
- *    |-------------------------------------------------------------------|
- *    |                        packet_type_enable_flags_0                 |
- *    |-------------------------------------------------------------------|
- *    |                        packet_type_enable_flags_1                 |
- *    |-------------------------------------------------------------------|
- *    |                        packet_type_enable_flags_2                 |
- *    |-------------------------------------------------------------------|
- *    |                        packet_type_enable_flags_3                 |
- *    |-------------------------------------------------------------------|
- *    |                         tlv_filter_in_flags                       |
- *    |-------------------------------------------------------------------|
- *    |         rx_header_offset         |       rx_packet_offset         |
- *    |-------------------------------------------------------------------|
- *    |       rx_mpdu_start_offset       |      rx_mpdu_end_offset        |
- *    |-------------------------------------------------------------------|
- *    |       rx_msdu_start_offset       |      rx_msdu_end_offset        |
- *    |-------------------------------------------------------------------|
- *    |              rsvd3               |      rx_attention_offset       |
- *    |-------------------------------------------------------------------|
- *    |              rsvd4                    | mo| fp| rx_drop_threshold |
- *    |                                       |ndp|ndp|                   |
- *    |-------------------------------------------------------------------|
+ *    |31 28|27|26|25|24|23|22|21 19|18 16|15  | 11| 10|9 8|7             0|
+ *    |-----+--+--+--+--+-----------------+----+---+---+---+---------------|
+ *    |rsvd1|DT|OV|PS|SS|      ring_id    |     pdev_id    |    msg_type   |
+ *    |-----------------------+-----+-----+--------------------------------|
+ *    |rsvd2|RX|RXHDL|   CLD  | CLC | CLM |           ring_buffer_size     |
+ *    |--------------------------------------------------------------------|
+ *    |                         packet_type_enable_flags_0                 |
+ *    |--------------------------------------------------------------------|
+ *    |                         packet_type_enable_flags_1                 |
+ *    |--------------------------------------------------------------------|
+ *    |                         packet_type_enable_flags_2                 |
+ *    |--------------------------------------------------------------------|
+ *    |                         packet_type_enable_flags_3                 |
+ *    |--------------------------------------------------------------------|
+ *    |                          tlv_filter_in_flags                       |
+ *    |-----------------------------------+--------------------------------|
+ *    |          rx_header_offset         |       rx_packet_offset         |
+ *    |-----------------------------------+--------------------------------|
+ *    |        rx_mpdu_start_offset       |      rx_mpdu_end_offset        |
+ *    |-----------------------------------+--------------------------------|
+ *    |        rx_msdu_start_offset       |      rx_msdu_end_offset        |
+ *    |-----------------------------------+--------------------------------|
+ *    |               rsvd3               |      rx_attention_offset       |
+ *    |--------------------------------------------------------------------|
+ *    |               rsvd4                    | mo| fp| rx_drop_threshold |
+ *    |                                        |ndp|ndp|                   |
+ *    |--------------------------------------------------------------------|
  * Where:
  *     PS = pkt_swap
  *     SS = status_swap
  *     OV = rx_offsets_valid
  *     DT = drop_thresh_valid
+ *     CLM = config_length_mgmt
+ *     CLC = config_length_ctrl
+ *     CLD = config_length_data
+ *     RXHDL = rx_hdr_len
+ *     RX = rxpcu_filter_enable_flag
  * The message is interpreted as follows:
  * dword0 - b'0:7   - msg_type: This will be set to
  *                    0xc (HTT_H2T_MSG_TYPE_RX_RING_SELECTION_CFG)
@@ -5781,7 +5789,23 @@ enum htt_srng_ring_id {
  *                    010 - 128bytes
  *                    100 - 256bytes
  *                    111 - Full mpdu bytes
- *          b'25:31 - rsvd2: Reserved for future use
+ *          b'25:26 - rx_hdr_len:
+ *                    Specifies the number of bytes of recvd packet to copy
+ *                    into the rx_hdr tlv.
+ *                    supported values for now by host:
+ *                    01 - 64bytes
+ *                    10 - 128bytes
+ *                    11 - 256bytes
+ *                    default - 128 bytes
+ *          b'27    - rxpcu_filter_enable_flag
+ *                    For Scan Radio Host CPU utilization is very high.
+ *                    In order to reduce CPU utilization we need to filter out
+ *                    certain configured MAC frames.
+ *                    To filter out configured MAC address frames, RxPCU should
+ *                    be zero which means allow all frames for MD at RxOLE
+ *                    host wil fiter out frames.
+ *                    RxPCU (Filter IN) -> RxOLE (Filter In/Filter Out)
+ *          b'28:31 - rsvd2: Reserved for future use
  * dword2 - b'0:31  - packet_type_enable_flags_0:
  *                    Enable MGMT packet from 0b0000 to 0b1001
  *                    bits from low to high: FP, MD, MO - 3 bits
@@ -5919,7 +5943,9 @@ PREPACK struct htt_rx_ring_selection_cfg_t {
              config_length_mgmt:3,
              config_length_ctrl:3,
              config_length_data:3,
-             rsvd2:             7;
+             rx_hdr_len:        2,
+             rxpcu_filter_enable_flag:1,
+             rsvd2:             4;
     A_UINT32 packet_type_enable_flags_0;
     A_UINT32 packet_type_enable_flags_1;
     A_UINT32 packet_type_enable_flags_2;
@@ -5957,6 +5983,15 @@ PREPACK struct htt_rx_ring_selection_cfg_t {
     A_UINT32 en_rx_tlv_pkt_offset:   1,
              rx_pkt_tlv_offset:      15,
              rsvd6:                  16;
+    A_UINT32 rx_mpdu_start_word_mask_v2:         20,
+             rx_mpdu_end_word_mask_v2:            8,
+             rsvd8:                               4;
+    A_UINT32 rx_msdu_end_word_mask_v2:           20,
+             rsvd9:                              12;
+    A_UINT32 rx_ppdu_end_usr_stats_word_mask_v2: 20,
+             rsvd10:                             12;
+    A_UINT32 packet_type_enable_fpmo_flags0;
+    A_UINT32 packet_type_enable_fpmo_flags1;
 } POSTPACK;
 
 #define HTT_RX_RING_SELECTION_CFG_SZ    (sizeof(struct htt_rx_ring_selection_cfg_t))
@@ -6082,6 +6117,27 @@ PREPACK struct htt_rx_ring_selection_cfg_t {
                 ((_var) |= ((_val) << HTT_RX_RING_SELECTION_CFG_CONFIG_LENGTH_DATA_S)); \
             } while (0)
 
+#define HTT_RX_RING_SELECTION_CFG_RX_HDR_LEN_M                 0x06000000
+#define HTT_RX_RING_SELECTION_CFG_RX_HDR_LEN_S                 25
+#define HTT_RX_RING_SELECTION_CFG_RX_HDR_LEN_GET(_var) \
+                (((_var) & HTT_RX_RING_SELECTION_CFG_RX_HDR_LEN_M) >> \
+                                      HTT_RX_RING_SELECTION_CFG_RX_HDR_LEN_S)
+#define HTT_RX_RING_SELECTION_CFG_RX_HDR_LEN_SET(_var, _val) \
+            do { \
+                HTT_CHECK_SET_VAL( HTT_RX_RING_SELECTION_CFG_RX_HDR_LEN, _val); \
+                ((_var) |= ((_val) << HTT_RX_RING_SELECTION_CFG_RX_HDR_LEN_S));\
+            } while(0)
+
+#define HTT_RX_RING_SELECTION_CFG_RXPCU_FILTER_M               0x08000000
+#define HTT_RX_RING_SELECTION_CFG_RXPCU_FILTER_S               27
+#define HTT_RX_RING_SELECTION_CFG_RXPCU_FILTER_GET(_var) \
+    (((_var) & HTT_RX_RING_SELECTION_CFG_RXPCU_FILTER_M) >> \
+        HTT_RX_RING_SELECTION_CFG_RXPCU_FILTER_S)
+#define HTT_RX_RING_SELECTION_CFG_RXPCU_FILTER_SET(_var, _val) \
+    do { \
+        HTT_CHECK_SET_VAL( HTT_RX_RING_SELECTION_CFG_RXPCU_FILTER, _val); \
+        ((_var) |= ((_val) << HTT_RX_RING_SELECTION_CFG_RXPCU_FILTER_S));\
+    } while(0)
 
 #define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG_0_M     0xffffffff
 #define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG_0_S     0
@@ -6439,6 +6495,71 @@ PREPACK struct htt_rx_ring_selection_cfg_t {
         ((_var) |= ((_val) <<  HTT_RX_RING_SELECTION_CFG_RX_PKT_TLV_OFFSET_S)); \
     } while (0)
 
+#define HTT_RX_RING_SELECTION_CFG_RX_MPDU_START_WORD_MASK_V2_M          0x000FFFFF
+#define HTT_RX_RING_SELECTION_CFG_RX_MPDU_START_WORD_MASK_V2_S          0
+#define HTT_RX_RING_SELECTION_CFG_RX_MPDU_START_WORD_MASK_V2_GET(_var) \
+       (((_var) & HTT_RX_RING_SELECTION_CFG_RX_MPDU_START_WORD_MASK_V2_M)>> \
+        HTT_RX_RING_SELECTION_CFG_RX_MPDU_START_WORD_MASK_V2_S)
+#define HTT_RX_RING_SELECTION_CFG_RX_MPDU_START_WORD_MASK_V2_SET(_var, _val) \
+       do { \
+                HTT_CHECK_SET_VAL(HTT_RX_RING_SELECTION_CFG_RX_MPDU_START_WORD_MASK_V2, _val);\
+         ((_var) |= ((_val) <<  HTT_RX_RING_SELECTION_CFG_RX_MPDU_START_WORD_MASK_V2_S)); \
+       } while (0)
+
+#define HTT_RX_RING_SELECTION_CFG_RX_MPDU_END_WORD_MASK_V2_M            0x0FF00000
+#define HTT_RX_RING_SELECTION_CFG_RX_MPDU_END_WORD_MASK_V2_S            20
+#define HTT_RX_RING_SELECTION_CFG_RX_MPDU_END_WORD_MASK_V2_GET(_var) \
+       (((_var) & HTT_RX_RING_SELECTION_CFG_RX_MPDU_END_WORD_MASK_V2_M)>> \
+        HTT_RX_RING_SELECTION_CFG_RX_MPDU_END_WORD_MASK_V2_S)
+#define HTT_RX_RING_SELECTION_CFG_RX_MPDU_END_WORD_MASK_V2_SET(_var, _val) \
+       do { \
+                HTT_CHECK_SET_VAL(HTT_RX_RING_SELECTION_CFG_RX_MPDU_END_WORD_MASK_V2, _val);\
+         ((_var) |= ((_val) <<  HTT_RX_RING_SELECTION_CFG_RX_MPDU_END_WORD_MASK_V2_S)); \
+       } while (0)
+
+#define HTT_RX_RING_SELECTION_CFG_RX_MSDU_END_WORD_MASK_V2_M            0x000FFFFF
+#define HTT_RX_RING_SELECTION_CFG_RX_MSDU_END_WORD_MASK_V2_S            0
+#define HTT_RX_RING_SELECTION_CFG_RX_MSDU_END_WORD_MASK_V2_GET(_var) \
+       (((_var) & HTT_RX_RING_SELECTION_CFG_RX_MSDU_END_WORD_MASK_V2_M)>> \
+        HTT_RX_RING_SELECTION_CFG_RX_MSDU_END_WORD_MASK_V2_S)
+#define HTT_RX_RING_SELECTION_CFG_RX_MSDU_END_WORD_MASK_V2_SET(_var, _val) \
+       do { \
+                HTT_CHECK_SET_VAL(HTT_RX_RING_SELECTION_CFG_RX_MSDU_END_WORD_MASK_V2, _val);\
+         ((_var) |= ((_val) <<  HTT_RX_RING_SELECTION_CFG_RX_MSDU_END_WORD_MASK_V2_S)); \
+       } while (0)
+
+#define HTT_RX_RING_SELECTION_CFG_RX_PPDU_END_USR_STATS_WORD_MASK_V2_M  0x000FFFFF
+#define HTT_RX_RING_SELECTION_CFG_RX_PPDU_END_USR_STATS_WORD_MASK_V2_S  0
+#define HTT_RX_RING_SELECTION_CFG_RX_PPDU_END_USR_STATS_WORD_MASK_V2_GET(_var) \
+       (((_var) & HTT_RX_RING_SELECTION_CFG_RX_PPDU_END_USR_STATS_WORD_MASK_V2_M)>> \
+        HTT_RX_RING_SELECTION_CFG_RX_PPDU_END_USR_STATS_WORD_MASK_V2_S)
+#define HTT_RX_RING_SELECTION_CFG_RX_PPDU_END_USR_STATS_WORD_MASK_V2_SET(_var, _val) \
+       do { \
+                HTT_CHECK_SET_VAL(HTT_RX_RING_SELECTION_CFG_RX_PPDU_END_USR_STATS_WORD_MASK_V2, _val);\
+         ((_var) |= ((_val) <<  HTT_RX_RING_SELECTION_CFG_RX_PPDU_END_USR_STATS_WORD_MASK_V2_S)); \
+       } while (0)
+
+#define HTT_RX_RING_SELECTION_CFG_PACKET_TYPE_ENABLE_FPMO_FLAGS0_M      0xFFFFFFFF
+#define HTT_RX_RING_SELECTION_CFG_PACKET_TYPE_ENABLE_FPMO_FLAGS0_S      0
+#define HTT_RX_RING_SELECTION_CFG_PACKET_TYPE_ENABLE_FPMO_FLAGS0_GET(_var) \
+    (((_var) & HTT_RX_RING_SELECTION_CFG_PACKET_TYPE_ENABLE_FPMO_FLAGS0_M)>> \
+        HTT_RX_RING_SELECTION_CFG_PACKET_TYPE_ENABLE_FPMO_FLAGS0_S)
+#define HTT_RX_RING_SELECTION_CFG_PACKET_TYPE_ENABLE_FPMO_FLAGS0_SET(_var, _val) \
+     do { \
+         HTT_CHECK_SET_VAL(HTT_RX_RING_SELECTION_CFG_PACKET_TYPE_ENABLE_FPMO_FLAGS0, _val); \
+         ((_var) |= ((_val) << HTT_RX_RING_SELECTION_CFG_PACKET_TYPE_ENABLE_FPMO_FLAGS0_S)); \
+     } while (0)
+
+#define HTT_RX_RING_SELECTION_CFG_PACKET_TYPE_ENABLE_FPMO_FLAGS1_M      0xFFFFFFFF
+#define HTT_RX_RING_SELECTION_CFG_PACKET_TYPE_ENABLE_FPMO_FLAGS1_S      0
+#define HTT_RX_RING_SELECTION_CFG_PACKET_TYPE_ENABLE_FPMO_FLAGS1_GET(_var) \
+    (((_var) & HTT_RX_RING_SELECTION_CFG_PACKET_TYPE_ENABLE_FPMO_FLAGS1_M)>> \
+        HTT_RX_RING_SELECTION_CFG_PACKET_TYPE_ENABLE_FPMO_FLAGS1_S)
+#define HTT_RX_RING_SELECTION_CFG_PACKET_TYPE_ENABLE_FPMO_FLAGS1_SET(_var, _val) \
+     do { \
+         HTT_CHECK_SET_VAL(HTT_RX_RING_SELECTION_CFG_PACKET_TYPE_ENABLE_FPMO_FLAGS1, _val); \
+         ((_var) |= ((_val) << HTT_RX_RING_SELECTION_CFG_PACKET_TYPE_ENABLE_FPMO_FLAGS1_S)); \
+     } while (0)
 
 /*
  * Subtype based MGMT frames enable bits.
@@ -6798,6 +6919,87 @@ PREPACK struct htt_rx_ring_selection_cfg_t {
 #define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG3_MO_DATA_NULL_M 0x04000000
 #define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG3_MO_DATA_NULL_S 26
 
+/* FPMO mode flags */
+/* MGMT */
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_0000_M 0x00000001
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_0000_S 0
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_0001_M 0x00000002
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_0001_S 1
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_0010_M 0x00000004
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_0010_S 2
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_0011_M 0x00000008
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_0011_S 3
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_0100_M 0x00000010
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_0100_S 4
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_0101_M 0x00000020
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_0101_S 5
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_0110_M 0x00000040
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_0110_S 6
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_0111_M 0x00000080
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_0111_S 7
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_1000_M 0x00000100
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_1000_S 8
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_1001_M 0x00000200
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_1001_S 9
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_1010_M 0x00000400
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_1010_S 10
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_1011_M 0x00000800
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_1011_S 11
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_1100_M 0x00001000
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_1100_S 12
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_1101_M 0x00002000
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_1101_S 13
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_1110_M 0x00004000
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_1110_S 14
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_1111_M 0x00008000
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_MGMT_1111_S 15
+
+/* CTRL */
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_0000_M 0x00010000
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_0000_S 16
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_0001_M 0x00020000
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_0001_S 17
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_0010_M 0x00040000
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_0010_S 18
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_0011_M 0x00080000
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_0011_S 19
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_0100_M 0x00100000
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_0100_S 20
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_0101_M 0x00200000
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_0101_S 21
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_0110_M 0x00400000
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_0110_S 22
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_0111_M 0x00800000
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_0111_S 23
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_1000_M 0x01000000
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_1000_S 24
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_1001_M 0x02000000
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_1001_S 25
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_1010_M 0x04000000
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_1010_S 26
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_1011_M 0x08000000
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_1011_S 27
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_1100_M 0x10000000
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_1100_S 28
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_1101_M 0x20000000
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_1101_S 29
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_1110_M 0x40000000
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_1110_S 30
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_1111_M 0x80000000
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG0_FPMO_CTRL_1111_S 31
+
+/* DATA */
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG1_FPMO_DATA_MCAST_M 0x00000001
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG1_FPMO_DATA_MCAST_S 0
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG1_FPMO_DATA_UCAST_M 0x00000002
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG1_FPMO_DATA_UCAST_S 1
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG1_FPMO_DATA_NULL_M 0x00000004
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG1_FPMO_DATA_NULL_S 2
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG1_FPMO_DATA_QOS_NULL_DATA_M 0x00000008
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG1_FPMO_DATA_QOS_NULL_DATA_S 3
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG1_FPMO_DATA_QOS_NULL_TB_M 0x00000010
+#define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_FLAG1_FPMO_DATA_QOS_NULL_TB_S 4
+
 #define HTT_RX_RING_SELECTION_CFG_PKT_TYPE_ENABLE_SET(word, httsym, value) \
             do { \
                 HTT_CHECK_SET_VAL(httsym, value); \
@@ -6855,6 +7057,9 @@ PREPACK struct htt_rx_ring_selection_cfg_t {
 
 #define HTT_RX_RING_SELECTION_CFG_TLV_FILTER_IN_FLAG_RX_PPDU_END_STATUS_DONE_M     0x00001000
 #define HTT_RX_RING_SELECTION_CFG_TLV_FILTER_IN_FLAG_RX_PPDU_END_STATUS_DONE_S     12
+
+#define HTT_RX_RING_SELECTION_CFG_TLV_FILTER_IN_FLAG_RX_PPDU_START_USER_INFO_M      0x00002000
+#define HTT_RX_RING_SELECTION_CFG_TLV_FILTER_IN_FLAG_RX_PPDU_START_USER_INFO_S      13
 
 #define HTT_RX_RING_TLV_ENABLE_SET(word, httsym, enable) \
             do { \
@@ -7095,7 +7300,8 @@ PREPACK struct htt_tx_monitor_cfg_t {
              filter_in_tx_msdu_end_mgmt:             1,
              filter_in_tx_msdu_end_ctrl:             1,
              filter_in_tx_msdu_end_data:             1,
-             rsvd3:                                 17;
+             word_mask_compaction_enable:            1,
+             rsvd3:                                 16;
     A_UINT32 tlv_filter_mask_in0;
     A_UINT32 tlv_filter_mask_in1;
     A_UINT32 tlv_filter_mask_in2;
@@ -7365,6 +7571,18 @@ PREPACK struct htt_tx_monitor_cfg_t {
                 ((_var) |= ((_val) << HTT_TX_MONITOR_CFG_FILTER_IN_TX_MSDU_END_DATA_S)); \
             } while (0)
 
+#define HTT_TX_MONITOR_CFG_WORD_MASK_COMPACTION_ENABLE_M         0x00008000
+#define HTT_TX_MONITOR_CFG_WORD_MASK_COMPACTION_ENABLE_S         15
+#define HTT_TX_MONITOR_CFG_WORD_MASK_COMPACTION_ENABLE_GET(_var) \
+            (((_var) & HTT_TX_MONITOR_CFG_WORD_MASK_COMPACTION_ENABLE_M) >> \
+                    HTT_TX_MONITOR_CFG_WORD_MASK_COMPACTION_ENABLE_S)
+#define HTT_TX_MONITOR_CFG_WORD_MASK_COMPACTION_ENABLE_SET(_var, _val) \
+            do { \
+                HTT_CHECK_SET_VAL(HTT_TX_MONITOR_CFG_WORD_MASK_COMPACTION_ENABLE, _val); \
+                ((_var) |= ((_val) << HTT_TX_MONITOR_CFG_WORD_MASK_COMPACTION_ENABLE_S)); \
+            } while (0)
+
+
 #define HTT_TX_MONITOR_CFG_TLV_FILTER_MASK_M            0xffffffff
 #define HTT_TX_MONITOR_CFG_TLV_FILTER_MASK_S            0
 #define HTT_TX_MONITOR_CFG_TLV_FILTER_MASK_GET(_var) \
@@ -7495,6 +7713,61 @@ PREPACK struct htt_tx_monitor_cfg_t {
             do { \
                 HTT_CHECK_SET_VAL(HTT_TX_MONITOR_CFG_DMA_MPDU_DATA, _val); \
                 ((_var) |= ((_val) << HTT_TX_MONITOR_CFG_DMA_MPDU_DATA_S)); \
+            } while (0)
+
+#define HTT_TX_MONITOR_CFG_TX_QUEUE_EXT_V2_WORD_MASK_M          0x00000fff
+#define HTT_TX_MONITOR_CFG_TX_QUEUE_EXT_V2_WORD_MASK_S          0
+#define HTT_TX_MONITOR_CFG_TX_QUEUE_EXT_V2_WORD_MASK_GET(_var) \
+            (((_var) & HTT_TX_MONITOR_CFG_TX_QUEUE_EXT_V2_WORD_MASK_M) >> \
+                    HTT_TX_MONITOR_CFG_TX_QUEUE_EXT_V2_WORD_MASK_S)
+#define HTT_TX_MONITOR_CFG_TX_QUEUE_EXT_V2_WORD_MASK_SET(_var, _val) \
+            do { \
+                HTT_CHECK_SET_VAL(HTT_TX_MONITOR_CFG_TX_QUEUE_EXT_V2_WORD_MASK, _val); \
+                ((_var) |= ((_val) << HTT_TX_MONITOR_CFG_TX_QUEUE_EXT_V2_WORD_MASK_S)); \
+            } while (0)
+
+#define HTT_TX_MONITOR_CFG_TX_PEER_ENTRY_V2_WORD_MASK_M         0x00fff000
+#define HTT_TX_MONITOR_CFG_TX_PEER_ENTRY_V2_WORD_MASK_S         12
+#define HTT_TX_MONITOR_CFG_TX_PEER_ENTRY_V2_WORD_MASK_GET(_var) \
+            (((_var) & HTT_TX_MONITOR_CFG_TX_PEER_ENTRY_V2_WORD_MASK_M) >> \
+                    HTT_TX_MONITOR_CFG_TX_PEER_ENTRY_V2_WORD_MASK_S)
+#define HTT_TX_MONITOR_CFG_TX_PEER_ENTRY_V2_WORD_MASK_SET(_var, _val) \
+            do { \
+                HTT_CHECK_SET_VAL(HTT_TX_MONITOR_CFG_TX_PEER_ENTRY_V2_WORD_MASK, _val); \
+                ((_var) |= ((_val) << HTT_TX_MONITOR_CFG_TX_PEER_ENTRY_V2_WORD_MASK_S)); \
+            } while (0)
+
+#define HTT_TX_MONITOR_CFG_FES_STATUS_END_WORD_MASK_M           0x0000ffff
+#define HTT_TX_MONITOR_CFG_FES_STATUS_END_WORD_MASK_S           0
+#define HTT_TX_MONITOR_CFG_FES_STATUS_END_WORD_MASK_GET(_var) \
+            (((_var) & HTT_TX_MONITOR_CFG_FES_STATUS_END_WORD_MASK_M) >> \
+                    HTT_TX_MONITOR_CFG_FES_STATUS_END_WORD_MASK_S)
+#define HTT_TX_MONITOR_CFG_FES_STATUS_END_WORD_MASK_SET(_var, _val) \
+            do { \
+                HTT_CHECK_SET_VAL(HTT_TX_MONITOR_CFG_FES_STATUS_END_WORD_MASK, _val); \
+                ((_var) |= ((_val) << HTT_TX_MONITOR_CFG_FES_STATUS_END_WORD_MASK_S)); \
+            } while (0)
+
+#define HTT_TX_MONITOR_CFG_RESPONSE_END_STATUS_WORD_MASK_M      0xffff0000
+#define HTT_TX_MONITOR_CFG_RESPONSE_END_STATUS_WORD_MASK_S      16
+#define HTT_TX_MONITOR_CFG_RESPONSE_END_STATUS_WORD_MASK_GET(_var) \
+            (((_var) & HTT_TX_MONITOR_CFG_RESPONSE_END_STATUS_WORD_MASK_M) >> \
+                    HTT_TX_MONITOR_CFG_RESPONSE_END_STATUS_WORD_MASK_S)
+#define HTT_TX_MONITOR_CFG_RESPONSE_END_STATUS_WORD_MASK_SET(_var, _val) \
+            do { \
+                HTT_CHECK_SET_VAL(HTT_TX_MONITOR_CFG_RESPONSE_END_STATUS_WORD_MASK, _val); \
+                ((_var) |= ((_val) << HTT_TX_MONITOR_CFG_RESPONSE_END_STATUS_WORD_MASK_S)); \
+            } while (0)
+
+#define HTT_TX_MONITOR_CFG_FES_STATUS_PROT_WORD_MASK_M          0x000007ff
+#define HTT_TX_MONITOR_CFG_FES_STATUS_PROT_WORD_MASK_S          0
+#define HTT_TX_MONITOR_CFG_FES_STATUS_PROT_WORD_MASK_GET(_var) \
+            (((_var) & HTT_TX_MONITOR_CFG_FES_STATUS_PROT_WORD_MASK_M) >> \
+                    HTT_TX_MONITOR_CFG_FES_STATUS_PROT_WORD_MASK_S)
+#define HTT_TX_MONITOR_CFG_FES_STATUS_PROT_WORD_MASK_SET(_var, _val) \
+            do { \
+                HTT_CHECK_SET_VAL(HTT_TX_MONITOR_CFG_FES_STATUS_PROT_WORD_MASK, _val); \
+                ((_var) |= ((_val) << HTT_TX_MONITOR_CFG_FES_STATUS_PROT_WORD_MASK_S)); \
             } while (0)
 
 /*
@@ -8409,7 +8682,7 @@ enum htt_ip_da_sa_prefix {
  *          b'9     - DISABLE_TA_CHECK: 1- Disable TA check for MPDU Sequence
  *                    num jump
  *          b'10    - DISABLE_QOS_CHECK: 1- Disable checking if qos/nonqos
- *            data type switch has happend for MPDU Sequence num jump
+ *            data type switch has happened for MPDU Sequence num jump
  *          b'11    - DISABLE_RAW_CHECK: 1- Disable checking for raw packet type
  *            for MPDU Sequence num jump
  *          b'12    - DISABLE_DECRYPT_ERR_CHECK: 1- Disable fisa cache commands
@@ -9367,7 +9640,10 @@ PREPACK struct htt_h2t_host_paddr_size_entry_t {
     A_UINT32 physical_address_hi;
 } POSTPACK;
 
-#define HTT_H2T_HOST_PADDR_SIZE_ENTRY_SIZE  (sizeof(struct htt_h2t_host_paddr_size_entry_t))
+#define HTT_H2T_HOST_PADDR_SIZE_ENTRY_SIZE \
+    (sizeof(struct htt_h2t_host_paddr_size_entry_t))
+#define HTT_H2T_HOST_PADDR_SIZE_ENTRY_DWORDS \
+    (HTT_H2T_HOST_PADDR_SIZE_ENTRY_SIZE >> 2)
 
 #define HTT_H2T_HOST_PADDR_SIZE_NUM_ENTRIES_M 0x0000FF00
 #define HTT_H2T_HOST_PADDR_SIZE_NUM_ENTRIES_S 8
@@ -12841,7 +13117,7 @@ PREPACK struct htt_tx_offload_deliver_ind_hdr_t
  * In certain generations of chips, the peer map message also contains
  * a HW peer ID.  This HW peer ID is used during rx --> tx frame forwarding
  * to identify which peer the frame needs to be forwarded to (i.e. the
- * peer assocated with the Destination MAC Address within the packet),
+ * peer associated with the Destination MAC Address within the packet),
  * and particularly which vdev needs to transmit the frame (for cases
  * of inter-vdev rx --> tx forwarding). The HW peer id here is the same
  * meaning as AST_INDEX_0.
@@ -12984,7 +13260,7 @@ PREPACK struct htt_tx_offload_deliver_ind_hdr_t
  *
  * The peer map v2 message also contains a HW peer ID.  This HW peer ID
  * is used during rx --> tx frame forwarding to identify which peer the
- * frame needs to be forwarded to (i.e. the peer assocated with the
+ * frame needs to be forwarded to (i.e. the peer associated with the
  * Destination MAC Address within the packet), and particularly which vdev
  * needs to transmit the frame (for cases of inter-vdev rx --> tx forwarding).
  * This DA-based peer ID that is provided for certain rx frames
@@ -14339,6 +14615,156 @@ typedef enum {
 
 #define HTT_RX_DELBA_BYTES 4
 
+
+/**
+ * @brief target -> host rx ADDBA / DELBA message definitions
+ *
+ * MSG_TYPE => HTT_T2H_MSG_TYPE_RX_ADDBA_EXTN
+ *
+ * @details
+ * The following diagram shows the format of the rx ADDBA extn message sent
+ * from the target to the host:
+ *
+ * |31                      20|19  16|15   13|12      8|7               0|
+ * |---------------------------------------------------------------------|
+ * |          peer ID         |  TID |     reserved    |     msg type    |
+ * |---------------------------------------------------------------------|
+ * |           reserved                      |      window size          |
+ * |---------------------------------------------------------------------|
+ *
+ * MSG_TYPE => HTT_T2H_MSG_TYPE_RX_DELBA_EXTN
+ *
+ * The following diagram shows the format of the rx DELBA message sent
+ * from the target to the host:
+ *
+ * |31                      20|19  16|15   13|12   10|9 8|7             0|
+ * |---------------------------------------------------------------------|
+ * |          peer ID         |  TID |   reserved    | IR|   msg type    |
+ * |---------------------------------------------------------------------|
+ * |                     reserved            |      window size          |
+ * |---------------------------------------------------------------------|
+ *
+ * The following field definitions describe the format of the rx ADDBA
+ * and DELBA messages sent from the target to the host.
+ *   - MSG_TYPE
+ *     Bits 7:0
+ *     Purpose: identifies this as an rx ADDBA or DELBA message
+ *     Value: ADDBA -> 0x31 (HTT_T2H_MSG_TYPE_RX_ADDBA_EXTN),
+ *            DELBA -> 0x32 (HTT_T2H_MSG_TYPE_RX_DELBA_EXTN)
+ *   - IR (initiator / recipient)
+ *     Bits 9:8 (DELBA only)
+ *     Purpose: specify whether the DELBA handshake was initiated by the
+ *         local STA/AP, or by the peer STA/AP
+ *     Value:
+ *         0 - unspecified
+ *         1 - initiator (a.k.a. originator)
+ *         2 - recipient (a.k.a. responder)
+ *         3 - unused / reserved
+ *     Value:
+ *         block ack window length specified by the received ADDBA/DELBA
+ *         management message.
+ *   - TID
+ *     Bits 19:16
+ *     Purpose: Specifies which traffic identifier the ADDBA / DELBA is for.
+ *     Value:
+ *         TID specified by the received ADDBA or DELBA management message.
+ *   - PEER_ID
+ *     Bits 31:20
+ *     Purpose: Identifies which peer sent the ADDBA / DELBA.
+ *     Value:
+ *         ID (hash value) used by the host for fast, direct lookup of
+ *         host SW peer info, including rx reorder states.
+ *  == DWORD 1
+ *   - WIN_SIZE
+ *     Bits 12:0 for ADDBA, bits 12:0 for DELBA
+ *     Purpose: Specifies the length of the block ack window (max = 8191).
+ */
+
+#define HTT_RX_ADDBA_EXTN_TID_M       0xf0000
+#define HTT_RX_ADDBA_EXTN_TID_S       16
+#define HTT_RX_ADDBA_EXTN_PEER_ID_M   0xfff00000
+#define HTT_RX_ADDBA_EXTN_PEER_ID_S   20
+
+/*--- Dword 0 ---*/
+#define HTT_RX_ADDBA_EXTN_TID_SET(word, value)                     \
+    do {                                                    \
+        HTT_CHECK_SET_VAL(HTT_RX_ADDBA_EXTN_TID, value);    \
+        (word) |= (value)  << HTT_RX_ADDBA_EXTN_TID_S;      \
+    } while (0)
+#define HTT_RX_ADDBA_EXTN_TID_GET(word)                             \
+    (((word) & HTT_RX_ADDBA_EXTN_TID_M) >> HTT_RX_ADDBA_EXTN_TID_S)
+
+#define HTT_RX_ADDBA_EXTN_PEER_ID_SET(word, value)                   \
+    do {                                                     \
+        HTT_CHECK_SET_VAL(HTT_RX_ADDBA_EXTN_PEER_ID, value); \
+        (word) |= (value)  << HTT_RX_ADDBA_EXTN_PEER_ID_S;   \
+    } while (0)
+#define HTT_RX_ADDBA_EXTN_PEER_ID_GET(word) \
+    (((word) & HTT_RX_ADDBA_EXTN_PEER_ID_M) >> HTT_RX_ADDBA_EXTN_PEER_ID_S)
+
+/*--- Dword 1 ---*/
+#define HTT_RX_ADDBA_EXTN_WIN_SIZE_M  0x1fff
+#define HTT_RX_ADDBA_EXTN_WIN_SIZE_S  0
+
+#define HTT_RX_ADDBA_EXTN_WIN_SIZE_SET(word, value)           \
+    do {                                                      \
+        HTT_CHECK_SET_VAL(HTT_RX_ADDBA_EXTN_WIN_SIZE, value); \
+        (word) |= (value)  << HTT_RX_ADDBA_EXTN_WIN_SIZE_S;   \
+    } while (0)
+
+#define HTT_RX_ADDBA_EXTN_WIN_SIZE_GET(word) \
+    (((word) & HTT_RX_ADDBA_WIN_SIZE_M) >> HTT_RX_ADDBA_WIN_SIZE_S)
+
+#define HTT_RX_ADDBA_EXTN_BYTES 8
+
+
+#define HTT_RX_DELBA_EXTN_INITIATOR_M   0x00000300
+#define HTT_RX_DELBA_EXTN_INITIATOR_S   8
+#define HTT_RX_DELBA_EXTN_TID_M         0xf0000
+#define HTT_RX_DELBA_EXTN_TID_S         16
+#define HTT_RX_DELBA_EXTN_PEER_ID_M     0xfff00000
+#define HTT_RX_DELBA_EXTN_PEER_ID_S     20
+
+/*--- Dword 0 ---*/
+#define HTT_RX_DELBA_INITIATOR_SET(word, value)                    \
+    do {                                                       \
+        HTT_CHECK_SET_VAL(HTT_RX_DELBA_INITIATOR, value);      \
+        (word) |= (value)  << HTT_RX_DELBA_INITIATOR_S;        \
+    } while (0)
+#define HTT_RX_DELBA_INITIATOR_GET(word) \
+    (((word) & HTT_RX_DELBA_INITIATOR_M) >> HTT_RX_DELBA_INITIATOR_S)
+
+#define HTT_RX_DELBA_EXTN_TID_SET(word, value)                       \
+    do {                                                  \
+        HTT_CHECK_SET_VAL(HTT_RX_DELBA_EXTN_TID, value);  \
+        (word) |= (value)  << HTT_RX_DELBA_EXTN_TID_S;    \
+    } while (0)
+#define HTT_RX_DELBA_EXTN_TID_GET(word) \
+    (((word) & HTT_RX_DELBA_EXTN_TID_M) >> HTT_RX_DELBA_EXTN_TID_S)
+
+#define HTT_RX_DELBA_EXTN_PEER_ID_SET(word, value)                        \
+    do {                                                      \
+        HTT_CHECK_SET_VAL(HTT_RX_DELBA_EXTN_PEER_ID, value);  \
+        (word) |= (value)  << HTT_RX_DELBA_EXTN_PEER_ID_S;    \
+    } while (0)
+#define HTT_RX_DELBA_EXTN_PEER_ID_GET(word) \
+    (((word) & HTT_RX_DELBA_EXTN_PEER_ID_M) >> HTT_RX_DELBA_EXTN_PEER_ID_S)
+
+/*--- Dword 1 ---*/
+#define HTT_RX_DELBA_EXTN_WIN_SIZE_M    0x1fff
+#define HTT_RX_DELBA_EXTN_WIN_SIZE_S    0
+
+#define HTT_RX_DELBA_EXTN_WIN_SIZE_SET(word, value)                     \
+    do {                                                            \
+        HTT_CHECK_SET_VAL(HTT_RX_DELBA_EXTN_WIN_SIZE, value);       \
+        (word) |= (value)  << HTT_RX_DELBA_EXTN_WIN_SIZE_S;         \
+    } while (0)
+#define HTT_RX_DELBA_EXTN_WIN_SIZE_GET(word) \
+    (((word) & HTT_RX_DELBA_EXTN_WIN_SIZE_M) >> HTT_RX_DELBA_EXTN_WIN_SIZE_S)
+
+#define HTT_RX_DELBA_EXTN_BYTES 8
+
+
 /**
  * @brief tx queue group information element definition
  *
@@ -14596,7 +15022,7 @@ PREPACK struct htt_txq_group {
  *   Purpose: Indicate whether data ACK RSSI is appended for each MSDU in
  *            TX_COMP_IND message.  The order of the per-MSDU ACK RSSI report
  *            matches the order of the MSDU IDs.  Although the ACK RSSI is the
- *            same for all MSDUs witin a single PPDU, the RSSI is duplicated
+ *            same for all MSDUs within a single PPDU, the RSSI is duplicated
  *            for each MSDU, for convenience.
  *            The ACK RSSI values are valid when status is COMPLETE_OK (and
  *            this append2 bit is set).
@@ -15969,7 +16395,7 @@ typedef struct {
  *     Purpose: indicate how many 32-bit integers follow the message header
  *   - NUM_CHARS
  *     Bits 31:16
- *     Purpose: indicate how many 8-bit charaters follow the series of integers
+ *     Purpose: indicate how many 8-bit characters follow the series of integers
  */
 #define HTT_RX_TEST_NUM_INTS_M   0xff00
 #define HTT_RX_TEST_NUM_INTS_S   8
@@ -16172,7 +16598,7 @@ struct rx_reorder_stats {
     A_UINT32 rxdesc_bmc_msdus_inv_peer;
     /* Number of MSDUs dropped due to no first MSDU flag */
     A_UINT32 rxdesc_no_1st_msdu;
-    /* Number of MSDUs droped due to ring overflow */
+    /* Number of MSDUs dropped due to ring overflow */
     A_UINT32 msdu_drop_ring_ov;
     /* Number of MSDUs dropped due to FC mismatch */
     A_UINT32 msdu_drop_fc_mismatch;
@@ -18122,7 +18548,7 @@ typedef enum {
  *
  *  b'0:15  - flow pool ID: Existing flow pool ID
  *
- *  b'16:31 - flow pool new size: new pool size for exisiting flow pool ID
+ *  b'16:31 - flow pool new size: new pool size for existing flow pool ID
  *
  */
 
@@ -18751,7 +19177,7 @@ PREPACK struct htt_cfr_dump_compl_ind {
  *  subsequent period (100 ms) as long as the backpressure remains unabated.
  *  This message indicates the ring id along with current head and tail index
  *  locations (i.e. write and read indices).
- *  The backpressure time indicates the time in ms for which continous
+ *  The backpressure time indicates the time in ms for which continuous
  *  backpressure has been observed in the ring.
  *
  *  The message format is as follows:
@@ -18770,11 +19196,12 @@ PREPACK struct htt_cfr_dump_compl_ind {
  *                               (HTT_T2H_MSG_TYPE_BKPRESSURE_EVENT_IND)
  *           b'8:15  - pdev_id:  0 indicates msg is for UMAC ring.
  *                               1, 2, 3 indicates pdev_id 0,1,2 and
-                                 the msg is for LMAC ring.
+ *                               the msg is for LMAC ring.
  *           b'16:23 - ring_type: Refer to enum htt_backpressure_ring_type.
  *           b'24:31 - ring_id:  Refer enum htt_backpressure_umac_ring_id/
  *                               htt_backpressure_lmac_ring_id. This represents
- *                               the ring id for which continous backpressure is seen
+ *                               the ring id for which continuous backpressure
+ *                               is seen
  *
  *  dword1 - b'0:15  - head_idx: This indicates the current head index of
  *                               the ring indicated by the ring_id
@@ -18782,7 +19209,7 @@ PREPACK struct htt_cfr_dump_compl_ind {
  *  dword1 - b'16:31 - tail_idx: This indicates the current tail index of
  *                               the ring indicated by the ring id
  *
- *  dword2 - b'0:31  - backpressure_time_ms: Indicates how long continous
+ *  dword2 - b'0:31  - backpressure_time_ms: Indicates how long continuous
  *                               backpressure has been seen in the ring
  *                               indicated by the ring_id.
  *                               Units = milliseconds
@@ -19295,7 +19722,7 @@ enum HTT_UL_OFDMA_TRIG_TYPE {
  *     Bits 31:16
  *     Purpose: indicates the secondary channel center frequency,
  *              only for 11acvht 80plus80 mode
- *     Value:  secondary channel center frequeny, in MHz units, if applicable
+ *     Value:  secondary channel center frequency, in MHz units, if applicable
  *
  * checksum field
  *   - CHECK_SUM
@@ -19647,16 +20074,16 @@ PREPACK struct htt_rx_peer_metadata_v0 {
  *
  * The following diagram shows the format of the RX PEER METADATA V1 format.
  *
- * |31 29|28   26|25   24|23        16|15 14|   13  |12                   0|
- * |-----------------------------------------------------------------------|
- * |Rsvd2|CHIP ID|LMAC ID|  VDEV ID   |Rsvd1|ML PEER| SW PEER ID/ML PEER ID|
- * |-----------------------------------------------------------------------|
+ * |31 29|28   26|25   24|23   16|15           14|   13  |12                  0|
+ * |---------------------------------------------------------------------------|
+ * |Rsvd2|CHIP ID|LMAC ID|VDEV ID|logical_link_id|ML PEER|SW PEER ID/ML PEER ID|
+ * |---------------------------------------------------------------------------|
  */
 PREPACK struct htt_rx_peer_metadata_v1 {
     A_UINT32
         peer_id:         13,
         ml_peer_valid:   1,
-        reserved1:       2,
+        logical_link_id: 2,
         vdev_id:         8,
         lmac_id:         2,
         chip_id:         3,
@@ -19689,6 +20116,17 @@ PREPACK struct htt_rx_peer_metadata_v1 {
 #define HTT_RX_PEER_META_DATA_V1_VDEV_ID_M    0x00ff0000
 #define HTT_RX_PEER_META_DATA_V1_VDEV_ID_GET(_var) \
     (((_var) & HTT_RX_PEER_META_DATA_V1_VDEV_ID_M) >> HTT_RX_PEER_META_DATA_V1_VDEV_ID_S)
+
+#define HTT_RX_PEER_META_DATA_V1_LOGICAL_LINK_ID_S    14
+#define HTT_RX_PEER_META_DATA_V1_LOGICAL_LINK_ID_M    0x0000c000
+#define HTT_RX_PEER_META_DATA_V1_LOGICAL_LINK_ID_GET(_var) \
+    (((_var) & HTT_RX_PEER_META_DATA_V1_LOGICAL_LINK_ID_M) >> HTT_RX_PEER_META_DATA_V1_LOGICAL_LINK_ID_S)
+
+#define HTT_RX_PEER_META_DATA_V1_LOGICAL_LINK_ID_SET(_var, _val) \
+    do {                                             \
+        HTT_CHECK_SET_VAL(HTT_RX_PEER_META_DATA_V1_LOGICAL_LINK_ID, _val);  \
+        ((_var) |= ((_val) << HTT_RX_PEER_META_DATA_V1_LOGICAL_LINK_ID_S)); \
+    } while (0)
 
 #define HTT_RX_PEER_META_DATA_V1_VDEV_ID_SET(_var, _val) \
     do {                                             \

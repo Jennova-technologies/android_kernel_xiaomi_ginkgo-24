@@ -531,6 +531,7 @@ static QDF_STATUS nan_handle_confirm(
 	struct wlan_objmgr_psoc *psoc;
 	struct nan_psoc_priv_obj *psoc_nan_obj;
 	struct nan_vdev_priv_obj *vdev_nan_obj;
+	struct wlan_objmgr_peer *peer;
 	QDF_STATUS status;
 
 	vdev_id = wlan_vdev_get_id(confirm->vdev);
@@ -1279,13 +1280,13 @@ static QDF_STATUS nan_discovery_generic_req(struct nan_generic_req *req)
 	return tx_ops->nan_discovery_req_tx(req, NAN_GENERIC_REQ);
 }
 
-void nan_discovery_flush_callback(struct scheduler_msg *msg)
+QDF_STATUS nan_discovery_flush_callback(struct scheduler_msg *msg)
 {
 	struct wlan_objmgr_psoc *psoc;
 
 	if (!msg || !msg->bodyptr) {
 		nan_err("Null pointer for NAN Discovery message");
-		return;
+		return QDF_STATUS_E_INVAL;
 	}
 
 	switch (msg->type) {
@@ -1301,11 +1302,13 @@ void nan_discovery_flush_callback(struct scheduler_msg *msg)
 	default:
 		nan_err("Unsupported request type: %d", msg->type);
 		qdf_mem_free(msg->bodyptr);
-		return;
+		return QDF_STATUS_E_INVAL;
 	}
 
 	wlan_objmgr_psoc_release_ref(psoc, WLAN_NAN_ID);
 	qdf_mem_free(msg->bodyptr);
+
+	return QDF_STATUS_SUCCESS;
 }
 
 QDF_STATUS nan_discovery_scheduled_handler(struct scheduler_msg *msg)
